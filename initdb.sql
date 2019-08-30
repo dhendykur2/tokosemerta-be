@@ -1,11 +1,13 @@
 CREATE TABLE IF NOT EXISTS users(
   id SERIAL PRIMARY KEY,
+  email VARCHAR(50),
   name VARCHAR(50),
   balance INT
 );
 
 CREATE TABLE IF NOT EXISTS stores(
   id SERIAL PRIMARY KEY,
+  email VARCHAR(50),
   name VARCHAR(50),
   img_header TEXT,
   balance INT,
@@ -38,9 +40,12 @@ CREATE TABLE IF NOT EXISTS trx_headers(
   store_id INT REFERENCES stores(id),
   user_id INT REFERENCES users(id),
   status VARCHAR(50),
+  notes VARCHAR(50),
+  canceled_by VARCHAR(50),
   ordered_at TIMESTAMP,
   canceled_at TIMESTAMP,
   confirmed_at TIMESTAMP,
+  process_at TIMESTAMP,
   ready_at TIMESTAMP,
   done_at TIMESTAMP
 );
@@ -48,5 +53,6 @@ CREATE TABLE IF NOT EXISTS trx_headers(
 CREATE TABLE IF NOT EXISTS trx_details(
   trx_header_id INT REFERENCES trx_headers(id),
   product_id INT REFERENCES products(id),
+  qty INT
   PRIMARY KEY (trx_header_id, product_id
 );
