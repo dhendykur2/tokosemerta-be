@@ -1,4 +1,5 @@
 const moment = require('moment');
+const QRCode = require('qrcode');
 
 const storeRepo = require('../repository/store');
 const productRepo = require('../repository/product');
@@ -57,8 +58,10 @@ module.exports = {
         await trxRepo.process(id, moment());
         message = 'pesanan anda diproses';
       } else if (status === 'ready') {
-        await trxRepo.ready(id, moment());
         message = 'pesanan anda telah siap silahkan diambil';
+        await QRCode.toDataURL(id.toString(), async (err, url) => {
+          await trxRepo.ready(id, url, moment());
+        });
       } else if (status == 'done') {
         await trxRepo.done(id, moment());
         message = 'pesanan anda telah selesai';

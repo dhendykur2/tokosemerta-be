@@ -29,7 +29,7 @@ module.exports = {
         const a = await trxRepo.createDetail(rows[0].id, id, qty);
         console.log(a);
       });
-      return res.send({ message: 'inserted' });
+      return res.send(rows[0]);
     } catch (error) {
       return next(error);
     }

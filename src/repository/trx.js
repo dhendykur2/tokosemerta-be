@@ -5,7 +5,8 @@ module.exports = {
   tran: () => client.query('BEGIN TRANSACTION;'),
   rollback: () => client.query('ROLLBACK;'),
   getByUser: (id) => client.query(
-      'SELECT th.*, u.name FROM trx_headers th INNER JOIN users u ON th.user_id = u.id WHERE user_id = $1 ORDER BY th.id DESC;',
+      `SELECT th.*, u.name FROM trx_headers th
+      INNER JOIN users u ON th.user_id = u.id WHERE user_id = $1 ORDER BY th.id DESC;`,
       [id]),
   getLastInsert: () => client.query('SELECT * FROM trx_headers ORDER BY id DESC LIMIT 1;'),
   get: (id) => client.query('SELECT * FROM trx_headers WHERE id = $1;', [id]),
@@ -23,8 +24,9 @@ module.exports = {
       `UPDATE trx_headers SET status = 'confirmed', confirmed_at = $1 WHERE id = $2;`, [date, id]),
   process: (id, date) => client.query(
       `UPDATE trx_headers SET status = 'process', process_at = $1 WHERE id = $2;`, [date, id]),
-  ready: (id, date) => client.query(
-      `UPDATE trx_headers SET status = 'ready', ready_at = $1 WHERE id = $2;`, [date, id]),
+  ready: (id, qrUrl, date) => client.query(
+      `UPDATE trx_headers SET status = 'ready', ready_at = $1, qr_url = $2 WHERE id = $3;`,
+      [date, qrUrl, id]),
   done: (id, date) => client.query(
       `UPDATE trx_headers SET status = 'done', done_at = $1 WHERE id = $2;`, [date, id]),
   review: (id, review, rating, date) => client.query(
