@@ -68,7 +68,7 @@ module.exports = {
       } else {
         return res.send({ message: 'not found' });
       }
-      await mailer.send({
+      mailer.send({
         from: 'PT. XXX',
         to: process.env.NODE_ENV === 'production' ?
           user[0].email : process.env.NOTIFICATION_EMAIL,

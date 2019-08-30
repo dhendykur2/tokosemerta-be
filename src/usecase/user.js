@@ -56,7 +56,7 @@ module.exports = {
         emailTo = user[0].email;
         canceledBy = 'Penjual';
       }
-      await mailer.send({
+      mailer.send({
         from: 'PT. XXX',
         to: process.env.NODE_ENV === 'production' ?
           emailTo : process.env.NOTIFICATION_EMAIL,
