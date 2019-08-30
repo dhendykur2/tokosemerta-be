@@ -32,7 +32,8 @@ module.exports = {
     try {
       const { id } = req.params;
       const { rows } = await trxRepo.getTransactionDetail(id);
-      if (rows.length < 0) return res.send({});
+      if (!rows.length) return res.send({ message: 'not found' });
+      console.log(rows);
       const result = {};
       result['id'] = rows[0].id;
       result['store_id'] = rows[0].store_id;

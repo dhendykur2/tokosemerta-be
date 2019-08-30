@@ -39,6 +39,6 @@ module.exports = {
   getTransactionDetail: (id) => client.query(
       `SELECT th.*, td.qty, p.name, p.img_url, p.price, r.rating, r.review
       FROM trx_headers th INNER JOIN trx_details td ON th.id = td.trx_header_id
-      INNER JOIN products p ON p.id = td.product_id INNER JOIN reviews r ON r.trx_header_id = th.id
+      INNER JOIN products p ON p.id = td.product_id LEFT JOIN reviews r ON r.trx_header_id = th.id
       WHERE th.id = $1;`, [id])
 };
