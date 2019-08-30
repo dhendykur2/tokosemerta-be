@@ -4,7 +4,9 @@ const { client } = new Db();
 module.exports = {
   tran: () => client.query('BEGIN TRANSACTION;'),
   rollback: () => client.query('ROLLBACK;'),
-  getByUser: (id) => client.query('SELECT * FROM trx_headers WHERE user_id = $1 ORDER BY id DESC;', [id]),
+  getByUser: (id) => client.query(
+      'SELECT th.*, u.name FROM trx_headers th INNER JOIN users u ON th.user_id = u.id WHERE user_id = $1 ORDER BY th.id DESC;',
+      [id]),
   getLastInsert: () => client.query('SELECT * FROM trx_headers ORDER BY id DESC LIMIT 1;'),
   get: (id) => client.query('SELECT * FROM trx_headers WHERE id = $1;', [id]),
   create: (storeId, userId, date) => client.query(
@@ -32,7 +34,8 @@ module.exports = {
       FROM trx_headers t INNER JOIN reviews r ON r.trx_header_id = t.id WHERE t.store_id = $1`,
       [storeId]),
   getByStore: (id) => client.query(
-      `SELECT * FROM trx_headers WHERE store_id = $1 ORDER BY id DESC;`, [id]),
+      `SELECT th.*, u.name FROM trx_headers th INNER JOIN users u ON th.user_id = u.id
+      WHERE store_id = $1 ORDER BY th.id DESC;`, [id]),
   getTransactionDetail: (id) => client.query(
       `SELECT th.*, td.qty, p.name, p.img_url, p.price, r.rating, r.review
       FROM trx_headers th INNER JOIN trx_details td ON th.id = td.trx_header_id
