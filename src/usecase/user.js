@@ -56,14 +56,14 @@ module.exports = {
         emailTo = user[0].email;
         canceledBy = 'Penjual';
       }
-      mailer.send({
-        from: 'PT. XXX',
-        to: process.env.NODE_ENV === 'production' ?
-          emailTo : process.env.NOTIFICATION_EMAIL,
-        subject: 'STATUS PEMBELIAN',
-        text: '<h2>Konfirmasi Email Anda</h2></br></br>',
-        html: `<p>transaction anda dengan nomor ${trx[0].id} dibatalkan oleh ${canceledBy}</p>`
-      });
+      // mailer.send({
+      //   from: 'PT. XXX',
+      //   to: process.env.NODE_ENV === 'production' ?
+      //     emailTo : process.env.NOTIFICATION_EMAIL,
+      //   subject: 'STATUS PEMBELIAN',
+      //   text: '<h2>Konfirmasi Email Anda</h2></br></br>',
+      //   html: `<p>transaction anda dengan nomor ${trx[0].id} dibatalkan oleh ${canceledBy}</p>`
+      // });
       return res.send({ message: 'canceled' });
     } catch (error) {
       return next(error);

@@ -68,14 +68,14 @@ module.exports = {
       } else {
         return res.send({ message: 'not found' });
       }
-      mailer.send({
-        from: 'PT. XXX',
-        to: process.env.NODE_ENV === 'production' ?
-          user[0].email : process.env.NOTIFICATION_EMAIL,
-        subject: 'STATUS PEMBELIAN',
-        text: '<h2>Konfirmasi Email Anda</h2></br></br>',
-        html: `<p>${message}</p>`
-      });
+      // mailer.send({
+      //   from: 'PT. XXX',
+      //   to: process.env.NODE_ENV === 'production' ?
+      //     user[0].email : process.env.NOTIFICATION_EMAIL,
+      //   subject: 'STATUS PEMBELIAN',
+      //   text: '<h2>Konfirmasi Email Anda</h2></br></br>',
+      //   html: `<p>${message}</p>`
+      // });
       return res.send({ message: 'success' });
     } catch (error) {
       return next(error);
