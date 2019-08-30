@@ -1,3 +1,4 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: process.env.NODEMAILER_SERVICE || 'gmail',
