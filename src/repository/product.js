@@ -5,8 +5,7 @@ module.exports = {
   gets: (id) => client.query(
       `SELECT p.id, p.name, p.img_url, p.price FROM products p 
       INNER JOIN store_product sp ON p.id = sp.product_id 
-      INNER JOIN stores s ON s.id = sp.product_id
-      WHERE s.id = $1`, [id]),
+      WHERE sp.store_id = $1`, [id]),
   get: (id) => client.query(
       `SELECT * FROM products WHERE id = $1`, [id]),
   create: (name, img, price) =>

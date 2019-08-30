@@ -5,16 +5,16 @@ module.exports = {
   tran: () => client.query('BEGIN TRANSACTION;'),
   rollback: () => client.query('ROLLBACK;'),
   getByUser: (id) => client.query('SELECT * FROM trx_headers WHERE user_id = $1 ORDER BY id DESC;', [id]),
-  getLastInsert: () => client.query('SELECT * FROM trx_headers ORDER BY id LIMIT 1;'),
+  getLastInsert: () => client.query('SELECT * FROM trx_headers ORDER BY id DESC LIMIT 1;'),
   get: (id) => client.query('SELECT * FROM trx_headers WHERE id = $1;', [id]),
   create: (storeId, userId, date) => client.query(
       `INSERT INTO trx_headers(id, store_id, user_id, status, ordered_at)
       VALUES(DEFAULT, $1, $2, 'pending', $3);`,
       [storeId, userId, date]),
-  createDetail: (headerId, productId) => client.query(
-      `INSERT INTO trx_details VALUES($1, $2)`, [headerId, productId]),
+  createDetail: (headerId, productId, qty) => client.query(
+      `INSERT INTO trx_details VALUES($1, $2, $3);`, [headerId, productId, qty]),
   canceled: (id, date, updatedBy, notes = '') => client.query(
-      `UPDATE trx_headers SET status = 'canceled', canceled_at = $1, updatedBy = $2, notes = $3
+      `UPDATE trx_headers SET status = 'canceled', canceled_at = $1, canceled_by = $2, notes = $3
       WHERE id = $4;`,
       [date, updatedBy, notes, id]),
   confirmed: (id, date) => client.query(

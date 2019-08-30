@@ -20,7 +20,7 @@ const postMethodSchema = {
     body: {
       store_id: NUMBER.required(),
       user_id: NUMBER.required(),
-      product_ids: Joi.array().items(NUMBER).required()
+      products: Joi.array().items(Joi.object()).required()
     }
   },
   ADD_REVIEW: {
@@ -60,7 +60,7 @@ const putMethodSchema = {
     },
     body: {
       notes: STRING,
-      updated_by: NUMBER.required() // 1 USER, 2 STORE
+      canceled_by: NUMBER.required() // 1 USER, 2 STORE
     }
   },
   UPDATE_TRX_STATUS: {

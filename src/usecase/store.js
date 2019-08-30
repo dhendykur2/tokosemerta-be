@@ -55,10 +55,10 @@ module.exports = {
         message = 'pesanan anda dikonfirmasi';
       } else if (status === 'process') {
         await trxRepo.process(id, moment());
-        message = 'pesanan anda diprocess';
+        message = 'pesanan anda diproses';
       } else if (status === 'ready') {
         await trxRepo.ready(id, moment());
-        message = 'pesanan anda telah siap';
+        message = 'pesanan anda telah siap silahkan diambil';
       } else if (status == 'done') {
         await trxRepo.done(id, moment());
         message = 'pesanan anda telah selesai';
@@ -69,7 +69,7 @@ module.exports = {
         from: 'PT. XXX',
         to: process.env.NODE_ENV === 'production' ?
           user[0].email : process.env.NOTIFICATION_EMAIL,
-        subject: 'Verifikasi Email Anda',
+        subject: 'STATUS PEMBELIAN',
         text: '<h2>Konfirmasi Email Anda</h2></br></br>',
         html: `<p>${message}</p>`
       });

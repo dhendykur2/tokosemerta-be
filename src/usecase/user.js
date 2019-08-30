@@ -1,5 +1,5 @@
 const moment = require('moment');
-
+const Promise = require('bluebird');
 const userRepo = require('../repository/user');
 const storeRepo = require('../repository/store');
 const trxRepo = require('../repository/trx');
@@ -20,15 +20,15 @@ module.exports = {
       const {
         store_id,
         user_id,
-        product_ids
+        products
       } = req.body;
-      await trxRepo.tran();
       await trxRepo.create(store_id, user_id, moment());
       const { rows } = await trxRepo.getLastInsert();
-      for (let i = 0; i < product_ids.length; i++) {
-        await trxRepo.createDetail(rows[0].id, product_ids[i]);
-      }
-      await trxRepo.rollback();
+      await Promise.mapSeries(products, async (product) => {
+        const { id, qty } = product;
+        const a = await trxRepo.createDetail(rows[0].id, id, qty);
+        console.log(a);
+      });
       return res.send({ message: 'inserted' });
     } catch (error) {
       return next(error);
@@ -39,28 +39,28 @@ module.exports = {
       const { id } = req.params;
       const {
         notes,
-        updated_by
+        canceled_by
       } = req.body;
       const { rows } = await trxRepo.get(id);
       if (rows[0].status != 'pending') return res.send({ message: 'status should pending' });
-      await trxRepo.canceled(id, moment(), updated_by, notes);
+      await trxRepo.canceled(id, moment(), canceled_by, notes);
       const { rows: trx } = await trxRepo.get(id);
       let emailTo = '';
       let canceledBy = '';
       const { rows: user } = await userRepo.get(trx[0].user_id);
       const { rows: store } = await storeRepo.get(trx[0].store_id);
-      if (updated_by == 1) {
+      if (canceled_by == 1) {
         emailTo = store[0].email;
-        canceledBy = 'Penjual';
+        canceledBy = 'Pembeli';
       } else {
         emailTo = user[0].email;
-        canceledBy = 'Pembeli';
+        canceledBy = 'Penjual';
       }
       await mailer.send({
         from: 'PT. XXX',
         to: process.env.NODE_ENV === 'production' ?
           emailTo : process.env.NOTIFICATION_EMAIL,
-        subject: 'Verifikasi Email Anda',
+        subject: 'STATUS PEMBELIAN',
         text: '<h2>Konfirmasi Email Anda</h2></br></br>',
         html: `<p>transaction anda dengan nomor ${trx[0].id} dibatalkan oleh ${canceledBy}</p>`
       });

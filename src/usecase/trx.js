@@ -18,7 +18,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const { rows } = await trxRepo.getByUser(id);
-      return res.send(rows[0]);
+      return res.send(rows);
     } catch (error) {
       return next(error);
     }
@@ -27,7 +27,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const { rows } = await trxRepo.getByStore(id);
-      return res.send(rows[0]);
+      return res.send(rows);
     } catch (error) {
       return next(error);
     }
