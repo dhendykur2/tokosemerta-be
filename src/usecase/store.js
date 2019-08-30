@@ -51,7 +51,7 @@ module.exports = {
       const { rows: trx } = await trxRepo.get(id);
       const { rows: user } = await userRepo.get(trx[0].user_id);
       let message = '';
-      if (status === 'confirm') {
+      if (status === 'confirmed') {
         await trxRepo.confirmed(id, moment());
         message = 'pesanan anda dikonfirmasi';
       } else if (status === 'process') {
