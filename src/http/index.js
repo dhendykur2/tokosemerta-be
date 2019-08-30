@@ -21,6 +21,8 @@ router.get('/store/:id/trx', validate('GET_BY_ID'), trx.getByStore); // V
 router.get('/store/:id/product', validate('GET_BY_ID'), store.getProducts); // V
 router.put('/store/:id/status', validate('UPDATE_TRX_STATUS'), store.updateTrx); // V
 
+router.get('/trx/:id', validate('GET_BY_ID'), trx.getById);
+
 router.get('/review/:id', validate('GET_BY_ID'), trx.getReviews); // V
 
 router.get('/product/:id', validate('GET_BY_ID'), store.getProductDetail); // V

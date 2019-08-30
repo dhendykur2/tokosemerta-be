@@ -32,5 +32,10 @@ module.exports = {
       FROM trx_headers t INNER JOIN reviews r ON r.trx_header_id = t.id WHERE t.store_id = $1`,
       [storeId]),
   getByStore: (id) => client.query(
-      `SELECT * FROM trx_headers WHERE store_id = $1 ORDER BY id DESC;`, [id])
+      `SELECT * FROM trx_headers WHERE store_id = $1 ORDER BY id DESC;`, [id]),
+  getTransactionDetail: (id) => client.query(
+      `SELECT th.*, td.qty, p.name, p.img_url, p.price, r.rating, r.review
+      FROM trx_headers th INNER JOIN trx_details td ON th.id = td.trx_header_id
+      INNER JOIN products p ON p.id = td.product_id INNER JOIN reviews r ON r.trx_header_id = th.id
+      WHERE th.id = $1;`, [id])
 };
